@@ -148,18 +148,21 @@ object ReporterPlugin : KotlinPlugin(
 //            cal[Calendar.HOUR_OF_DAY] = 9
 //            cal[Calendar.MINUTE] = 0
 //            cal[Calendar.SECOND] = 0
-            cal.set(Calendar.HOUR_OF_DAY,9)
-            cal.set(Calendar.MINUTE,0)
-
-            cal.add(Calendar.DAY_OF_YEAR,1)
+            cal.set(Calendar.HOUR_OF_DAY,8)
+            cal.set(Calendar.MINUTE,40)
+            cal.set(Calendar.SECOND,0)
+            if (cal.time.before(Date())){
+                cal.add(Calendar.DAY_OF_YEAR,1)
+            }
             val dateRepresentation = cal.time
             val timer = Timer()
             val daySpan = (24 * 60 * 60 * 1000).toLong()
 //            val task2 =
+            logger.info(dateRepresentation.toString())
             timer.scheduleAtFixedRate(MyTimerTask2(), dateRepresentation.time.minus(10 * 60 * 1000), daySpan)
 //            val task =
             timer.scheduleAtFixedRate(MyTimerTask(), dateRepresentation, daySpan)
-            logger.info("XXX")
+            logger.info("news plugin launch end")
         }
 
         val sendNewsToTarget: suspend (Contact) -> Unit = {

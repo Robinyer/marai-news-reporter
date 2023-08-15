@@ -171,7 +171,8 @@ class NewsCrawler {
 //        g.dispose()
         val os = ByteArrayOutputStream()
 //        ImageIO.write(newsImg, "png", os)
-        newsText = newsText.replace("强奸","强I奸")
+        // 每个字符转为list，然后join
+        newsText = newsText.split("").joinToString(separator = "\u200B")
         println(todayTitle)
         println(LocalDateTime.now().format(myFormatter))
         if (todayTitle.contains(LocalDateTime.now().format(myFormatter))) {

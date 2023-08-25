@@ -20,7 +20,8 @@ import javax.swing.text.DateFormatter
 class NewsCrawler {
     private val httpGetter = HTTPGetter()
 
-    private val entryUrl: String = "https://www.zhihu.com/people/mt36501"
+//    private val entryUrl: String = "https://www.zhihu.com/people/mt36501/posts"
+    private val entryUrl: String = "https://www.tsuk1.cn/author/13"
 
 
     private val byteArrayCache = Cached(byteArrayOf(), 1000 * 60 * 60 * 4L)
@@ -37,10 +38,11 @@ class NewsCrawler {
         }
 
         val entryPageDoc = Jsoup.parse(httpGetter.get(entryUrl))
-        var todayUrl: String = entryPageDoc.select("div.ArticleItem h2.ContentItem-title a[href]").first()?.attr("href")
-            ?: throw IOException("Failed to get url!")
-        var todayTitle: String = entryPageDoc.select("div.ArticleItem h2.ContentItem-title a").first()?.text()
-            ?: throw IOException("Failed to get title!")
+
+        var todayUrl: String = entryPageDoc.select("h2.item-heading a").first()?.attr("href")
+            ?: throw IOException("Failed to get todayUrl!")
+        var todayTitle: String = entryPageDoc.select("h2.item-heading a").first()?.text()
+            ?: throw IOException("Failed to get todayTitle!")
         println(todayTitle)
         val myFormatter = DateTimeFormatter.ofPattern("M月d日")
 //        LocalDateTime.now().format(myFormatter)
@@ -50,7 +52,7 @@ class NewsCrawler {
         }
 
         val newsDoc = Jsoup.parse(httpGetter.get(todayUrl))
-        val newsNode = newsDoc.select("div.RichText.ztext.Post-RichText")
+        val newsNode = newsDoc.select("article")
 //        println(newsDoc)
 //        var newsImgUrl = newsNode.select("figure img").attr("src")
 //            ?: throw IOException("Failed to get ImageUrl!")
@@ -90,7 +92,7 @@ class NewsCrawler {
             if (pStr.isEmpty()) {
                 continue
             }
-            if (pStr.contains("在这里，每天 60 秒读懂世界") || pStr.contains("【微语】")){
+            if (pStr.contains("在这里，每天 60 秒读懂世界") || pStr.contains("【微语】") || pStr.contains("https://")){
                 continue
             }
             val lineLen = 40

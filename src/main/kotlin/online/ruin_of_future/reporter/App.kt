@@ -43,29 +43,34 @@ object ReporterPlugin : KotlinPlugin(
                         for (groupId in NewsGroupWhiteList.groupIdsPerBot[it.id]!!) {
                             try {
                                 val group = it.getGroup(groupId)
-                                val myPair = newsCrawler.newsToday()
-                                if (myPair.first.contains("Ops")){
-                                    group?.sendMessage(myPair.first)
-                                    logger.info(
-                                        "No Daily news Message. push to group " +
-                                                (group?.name ?: "<No group of ${groupId}> from ${it.id}")
-                                    )
-                                }else{
+                                try {
+                                    val myPair = newsCrawler.newsToday()
+                                    if (myPair.first.contains("Ops")){
+                                        group?.sendMessage(myPair.first)
+                                        logger.info(
+                                            "No Daily news Message. push to group " +
+                                                    (group?.name ?: "<No group of ${groupId}> from ${it.id}")
+                                        )
+                                    }else{
 //                                    val inputStream = ByteArrayInputStream(myPair.second)
 //                                    val imageExternalResource = inputStream.toExternalResource()
 //                                    val imageId = group?.uploadImage(imageExternalResource)?.imageId
-                                    val chain = buildMessageChain {
+                                        val chain = buildMessageChain {
 //                                        +Image(imageId ?: "")
-                                        +PlainText(myPair.first)
-                                    }
-                                    group?.sendMessage(chain)
-                                    logger.info(
-                                        "Daily news push to group " +
-                                                (group?.name ?: "<No group of ${groupId}> from ${it.id}")
-                                    )
+                                            +PlainText(myPair.first)
+                                        }
+                                        group?.sendMessage(chain)
+                                        logger.info(
+                                            "Daily news push to group " +
+                                                    (group?.name ?: "<No group of ${groupId}> from ${it.id}")
+                                        )
 //                                    imageExternalResource.close()
+                                    }
+                                    successedSend += 1
+                                }catch (e:Exception){
+                                    logger.error(e)
+                                    group?.sendMessage("error: $e");
                                 }
-                                successedSend += 1
                             } catch (e: Exception) {
                                 logger.error(e)
                             }

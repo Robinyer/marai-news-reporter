@@ -92,7 +92,7 @@ class NewsCrawler {
             if (pStr.isEmpty()) {
                 continue
             }
-            if (pStr.contains("在这里，每天 60 秒读懂世界") || pStr.contains("【微语】") || pStr.contains("https://")){
+            if (pStr.contains("在这里，每天 60 秒读懂世界") || pStr.contains("【微语】") || pStr.contains("https")){
                 continue
             }
             val lineLen = 40

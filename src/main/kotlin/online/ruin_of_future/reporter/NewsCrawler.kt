@@ -21,7 +21,7 @@ class NewsCrawler {
     private val httpGetter = HTTPGetter()
 
 //    private val entryUrl: String = "https://www.zhihu.com/people/mt36501/posts"
-    private val entryUrl: String = "https://www.tsuk1.cn/author/13"
+    private val entryUrl: String = "https://www.jun.la/60snews/"
 
 
     private val byteArrayCache = Cached(byteArrayOf(), 1000 * 60 * 60 * 4L)
@@ -39,9 +39,9 @@ class NewsCrawler {
 
         val entryPageDoc = Jsoup.parse(httpGetter.get(entryUrl))
 
-        var todayUrl: String = entryPageDoc.select("h2.item-heading a").first()?.attr("href")
+        var todayUrl: String = entryPageDoc.select("h2 a").first()?.attr("href")
             ?: throw IOException("Failed to get todayUrl!")
-        var todayTitle: String = entryPageDoc.select("h2.item-heading a").first()?.text()
+        var todayTitle: String = entryPageDoc.select("h2 a").first()?.text()
             ?: throw IOException("Failed to get todayTitle!")
         println(todayTitle)
         val myFormatter = DateTimeFormatter.ofPattern("M月d日")

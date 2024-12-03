@@ -92,7 +92,7 @@ class NewsCrawler {
             if (pStr.isEmpty()) {
                 continue
             }
-            if (pStr.contains("在这里，每天 60 秒读懂世界") || pStr.contains("【微语】") || pStr.contains("https")){
+            if (pStr.contains("在这里，每天 60 秒读懂世界") || pStr.contains("【微语】") || pStr.contains("https") || pStr.contains("来源:")){
                 continue
             }
             val lineLen = 40
@@ -173,8 +173,8 @@ class NewsCrawler {
 //        g.dispose()
         val os = ByteArrayOutputStream()
 //        ImageIO.write(newsImg, "png", os)
-        // 每个字符转为list，然后join
-        newsText = newsText.split("").joinToString(separator = "\u200B")
+        // 每两个字符转为list，然后join
+        newsText = newsText.chunked(2).joinToString(separator = "\u200B")
         println(todayTitle)
         println(LocalDateTime.now().format(myFormatter))
         if (todayTitle.contains(LocalDateTime.now().format(myFormatter))) {
